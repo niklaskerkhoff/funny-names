@@ -56,7 +56,7 @@ def get_funny_name():
         if funny_name not in used_funny_names:
             break
 
-    print('Result by {}: {}', model_name, funny_name)
+    print('Result by {}: {}'.format(model_name, funny_name))
 
     return funny_name
 
@@ -79,5 +79,4 @@ def ensure_file_exists(file_path):
 
 
 if __name__ == "__main__":
-    host = os.getenv('HOST', '127.0.0.1')
-    uvicorn.run(app, host=host, port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000)
