@@ -3,7 +3,7 @@ version: '3.8'
 services:
   python-app:
     build: .
-    container_name: funny_names
+    container_name: funny-names
     ports:
       - "8000:8000"
     volumes:
