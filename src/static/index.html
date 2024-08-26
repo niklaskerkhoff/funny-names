@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>Funny Names</title>
+
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons'
+        rel='stylesheet'>
+
+  <style>
+      * {
+          font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+      }
+
+      body {
+          width: 100vw;
+          height: 100svh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin: 0;
+          padding: 0;
+      }
+
+      div#funny-name {
+          font-size: 1.5rem;
+      }
+
+      div.note {
+          color: #bcbcbc;
+          position: absolute;
+          bottom: 0;
+          padding: 16px;
+      }
+
+      i {
+          color: #ff9100;
+          font-size: 56px !important;
+          cursor: pointer;
+          font-weight: bolder;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Standard */
+          animation: rotate 1s linear infinite;
+          animation-play-state: paused;
+      }
+
+      i.is-loading {
+          animation-play-state: running;
+      }
+
+      @keyframes rotate {
+          from {
+              transform: rotate(0deg);
+          }
+          to {
+              transform: rotate(360deg);
+          }
+      }
+
+  </style>
+
+</head>
+<body>
+
+<div id='funny-name'></div>
+<i id='loader' class='material-icons' onclick='generateFunnyName()'>
+  autorenew
+</i>
+<div class='note'>
+  Die Namen werden von ChatGPT generiert.
+  Es wird sichergestellt, dass sie eindeutig sind.
+</div>
+
+
+<script>
+
+  let isLoading = false
+
+  generateFunnyName()
+
+  async function generateFunnyName() {
+
+    if (isLoading) return
+
+    setIsLoading(true)
+    const errorMessage = 'Sorry, da ist was schief gelaufen :/ \nVersuche es gerne nochmal!'
+
+    try {
+      const result = await fetch('/api/funny-name')
+      const status = result.status
+
+      if (status !== 200) {
+        alert(errorMessage)
+        return
+      }
+
+      const funnyName = await result.text()
+      document.querySelector('#funny-name').innerText = funnyName
+    } catch (e) {
+      alert(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+
+  }
+
+  function setIsLoading(flag) {
+    isLoading = flag
+    if (isLoading) {
+      document.querySelector('#loader').classList.add('is-loading')
+    } else {
+      document.querySelector('#loader').classList.remove('is-loading')
+    }
+  }
+
+</script>
+
+</body>
+</html>
